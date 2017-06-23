@@ -4,11 +4,11 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM alpine:3.4
+FROM alpine:edge
 
-RUN echo 'http://mirrors.aliyun.com/alpine/v3.4/main' > /etc/apk/repositories \
-   && echo '@community http://mirrors.aliyun.com/alpine/v3.4/community' >> /etc/apk/repositories \
-   && echo '@testing http://mirrors.aliyun.com/alpine/v3.4/testing' >> /etc/apk/repositories
+RUN echo 'http://mirrors.aliyun.com/alpine/edge/main' > /etc/apk/repositories \
+   && echo '@community http://mirrors.aliyun.com/alpine/edge/community' >> /etc/apk/repositories \
+   && echo '@testing http://mirrors.aliyun.com/alpine/edge/testing' >> /etc/apk/repositories
 
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
