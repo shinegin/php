@@ -6,6 +6,10 @@
 
 FROM alpine:3.4
 
+RUN echo 'http://mirrors.aliyun.com/alpine/v3.4/main' > /etc/apk/repositories \
+   && echo '@community http://mirrors.aliyun.com/alpine/v3.4/community' >> /etc/apk/repositories \
+   && echo '@testing http://mirrors.aliyun.com/alpine/v3.4/testing' >> /etc/apk/repositories
+
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
 		autoconf \
