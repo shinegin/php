@@ -6,6 +6,10 @@
 
 FROM alpine:3.4
 
+RUN echo 'http://mirrors.aliyun.com/alpine/v3.4/main' > /etc/apk/repositories \
+   && echo '@community http://mirrors.aliyun.com/alpine/v3.4/community' >> /etc/apk/repositories \
+   && echo '@testing http://mirrors.aliyun.com/alpine/v3.4/testing' >> /etc/apk/repositories
+
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
 		autoconf \
@@ -48,11 +52,11 @@ ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
-ENV GPG_KEYS A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E
+#ENV GPG_KEYS A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E
 
-ENV PHP_VERSION 7.1.4
-ENV PHP_URL="https://secure.php.net/get/php-7.1.4.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.1.4.tar.xz.asc/from/this/mirror"
-ENV PHP_SHA256="71514386adf3e963df087c2044a0b3747900b8b1fc8da3a99f0a0ae9180d300b" PHP_MD5="a74c13f8779349872b365e6732e8c98e"
+ENV PHP_VERSION 7.1.8
+ENV PHP_URL="https://secure.php.net/get/php-7.1.8.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.1.8.tar.xz.asc/from/this/mirror"
+#ENV PHP_SHA256="71514386adf3e963df087c2044a0b3747900b8b1fc8da3a99f0a0ae9180d300b" PHP_MD5="a74c13f8779349872b365e6732e8c98e"
 
 RUN set -xe; \
 	\
@@ -64,28 +68,29 @@ RUN set -xe; \
 	mkdir -p /usr/src; \
 	cd /usr/src; \
 	\
-	wget -O php.tar.xz "$PHP_URL"; \
-	\
-	if [ -n "$PHP_SHA256" ]; then \
-		echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
-	fi; \
-	if [ -n "$PHP_MD5" ]; then \
-		echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
-	fi; \
-	\
-	if [ -n "$PHP_ASC_URL" ]; then \
-		wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
-		export GNUPGHOME="$(mktemp -d)"; \
-		#for key in $GPG_KEYS; do \
-		#	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-		#done; \
-		#gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-		rm -r "$GNUPGHOME"; \
-	fi; \
+	#wget -O php.tar.xz "$PHP_URL"; \
+	#\
+	#if [ -n "$PHP_SHA256" ]; then \
+	#	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
+	#fi; \
+	#if [ -n "$PHP_MD5" ]; then \
+	#	echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
+	#fi; \
+	#\
+	#if [ -n "$PHP_ASC_URL" ]; then \
+	#	wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
+	#	export GNUPGHOME="$(mktemp -d)"; \
+	#	#for key in $GPG_KEYS; do \
+	#	#	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+	#	#done; \
+	#	#gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+	#	rm -r "$GNUPGHOME"; \
+	#fi; \
 	\
 	apk del .fetch-deps
 
 COPY docker-php-source /usr/local/bin/
+COPY php-src/php.tar.xz /usr/src/
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
