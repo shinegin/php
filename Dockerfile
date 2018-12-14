@@ -141,6 +141,14 @@ RUN set -xe \
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
 RUN apk add --no-cache bash \
+    autoconf \
+    pcre-dev \
+    zlib-dev \
+    gd-dev \
+    make \
+    perl-dev \
+    geoip-dev \
+    libc-dev \
     openssh-client \
     wget \
     supervisor \
